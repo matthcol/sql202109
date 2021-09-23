@@ -235,6 +235,80 @@ select * from
 		(3, datepart(year, getdate()))
 	) N(num, year);
 
+-- statistiques : fonctions d'agrégation
+
+-- compter des lignes
+select count(*) from movies;
+
+-- 3 variantes de count
+select 
+	count(*) as nb_stars,
+	count(birthdate) as nb_birthdate,
+	count(distinct birthdate) as nb_birthdate_distinct,
+	count(distinct datepart(year, birthdate)) as nb_year_distinct
+from stars;
+
+-- autres stats
+select 
+	min(year) as year_min, max(year) as year_max,
+	min(duration) as duration_min, 
+	max(duration) as duration_max,
+	avg(duration) as duration_avg
+from movies;
+
+select * from stars where name like '%Tarantino';
+select * 
+from movies
+where id_director = 233;
+
+select string_agg(title, ', ')
+from movies
+where id_director = 233;
+
+select 
+	string_agg(title, ', ') WITHIN GROUP (ORDER BY year)
+from movies
+where id_director = 233;
+
+select 
+	string_agg(title, ', ') WITHIN GROUP (ORDER BY year desc)
+from movies
+where id_director = 233;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
