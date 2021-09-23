@@ -253,13 +253,110 @@ select
 	min(year) as year_min, max(year) as year_max,
 	min(duration) as duration_min, 
 	max(duration) as duration_max,
-	avg(duration) as duration_avg
+	avg(duration) as duration_avg,
+	sum(duration) / 60 as duration_total_h
 from movies;
 
 select * from stars where name like '%Tarantino';
+
 select * 
 from movies
 where id_director = 233;
+
+select * 
+from movies
+where id_director = (
+	select id from stars
+	where name like '%Tarantino'
+)
+order by year;
+
+select * 
+from movies
+where id_director in (
+	select id from stars
+	where name like 'Steve McQueen'
+)
+order by year;
+
+-- film(s) de durée maximale
+-- 1. décomposition du pb
+select max(duration) from movies;  -- 594
+select * from movies where duration = 594;
+-- 2. réunit les morceaux
+select * from movies where duration = (
+	select max(duration) from movies
+);
+
+-- films de durée au dessus de la moyenne
+select * from movies where duration > (
+	select avg(duration) from movies
+);
+
+-- liste des réalisateurs
+-- sol 1 : sous-requete indépendante
+select * from stars where id in (
+	select id_director from movies)
+order by name;
+
+-- sol 2 : sous-requete dépendante
+select * from stars s where exists (
+	select * from movies m where m.id_director = s.id)
+order by s.name;
+
+-- liste des stars n'ayant jamais réalisé de films
+select * from stars s 
+where not exists (
+		select * from movies m where m.id_director = s.id)
+order by s.name;
+
+select * from stars s 
+where not exists (
+		select * from movies m where m.id_director = s.id)
+	and s.name like 'Clint Eastwood'
+order by s.name;
+
+select * from stars s 
+where not exists (
+		select * from movies m where m.id_director = s.id)
+	and s.name like 'Steve McQueen'
+order by s.name;
+
+-- liste des acteurs
+select * from stars where id in (
+	select id_actor from play);
+
+select * from stars 
+where id in (
+		select id_actor from play)
+	and name like 'Steve McQueen';
+
+select * from stars s
+where exists (select * from play p where p.id_actor = s.id)
+	and s.name like 'Steve McQueen';
+
+
+
+-- liste des acteurs-realisateurs
+select * from stars 
+where 
+	id in (
+		select id_director from movies)
+	and id in (
+		select id_actor from play)
+order by name;
+
+
+
+
+
+
+
+
+
+
+
+
 
 select string_agg(title, ', ')
 from movies
