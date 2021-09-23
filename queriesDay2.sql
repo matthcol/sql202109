@@ -214,9 +214,26 @@ select
 from stars;
 
 select 
-	DATEADD(day, 20, '2021-01-31'),
+	DATEADD(day, 20, cast('2021-01-31' as date)),
 	DATEADD(month, 1, '2021-01-31'),
 	DATEADD(month, 1, '2020-01-31');
+
+select 	1 + 4 as res;
+
+select year
+from
+	(values 
+		(1+2004),
+		(2006),
+		(datepart(year, getdate()))
+	) N(year);
+
+select * from
+	(values 
+		(1, 1+2004),
+		(2, 2006),
+		(3, datepart(year, getdate()))
+	) N(num, year);
 
 
 
