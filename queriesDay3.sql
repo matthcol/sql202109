@@ -206,11 +206,9 @@ order by nb_movies desc;
 -- 2. garder les réalisateurs avec ce nombre
 -- 3. joindre table stars pour avoir les noms
 select max(nb_movies) from (
-	select 
-		count(*) as nb_movies
-	from 
-		stars s join movies m on s.id = m.id_director
-	group by s.id, s.name) nbs;
+	select count(*) as nb_movies
+	from movies 
+	group by id_director) nbs;
 
 -- raccourci chez Oracle :
 select 
@@ -235,11 +233,9 @@ from
 group by s.id, s.name
 having count(*) = (
 	select max(nb_movies) from (
-		select 
-			count(*) as nb_movies
-		from 
-			stars s join movies m on s.id = m.id_director
-		group by s.id, s.name) nbs
+		select count(*) as nb_movies
+		from movies 
+		group by id_director) nbs
 );
 
 
