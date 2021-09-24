@@ -148,6 +148,24 @@ where s.name like '%McQueen'
 group by  s.name
 order by nb_movies desc;
 
+-- compter le nombre de films par année 
+-- en les classant du plus grand nb au plus petit
+select year, count(*) as nb_movies
+from movies
+group by year
+order by nb_movies desc;
+
+-- liste des films avec leur nombre d'acteurs
+-- en les classant du plus grand nb au plus petit
+select 
+	m.id, m.title, m.year, count(*) as nb_actors
+from 
+	movies m join play p on m.id = p.id_movie
+group by m.id, m.title, m.year
+order by nb_actors desc;
+
+
+
 
 
 
