@@ -238,15 +238,20 @@ having count(*) = (
 		group by id_director) nbs
 );
 
-
-
 -- pour les personnes : 
 --	- Clint Eastwood, Steve McQueen (les 2), Quentin Tarentino
 --  - Leonardo DiCaprio
 -- compter le nombre de réalisation (y compris 0) 
 -- et la durée totale des films réalisés
--- (ajouter un cut à 20 films minimuns)
-
+select 
+	s.id, s.name, 
+	count(m.id) as nb_movies,
+	coalesce(sum(m.duration), 0) as total_duration
+from stars s left join movies m on s.id = m.id_director
+where s.name in (
+	'Clint Eastwood', 'Steve McQueen', 'Leoardo DiCaprio', 
+	'Quentin Tarantino')
+group by s.id, s.name;
 
 -- même requête en ajoutant le nombre de films joués 
 -- et la durée totale des films joués
