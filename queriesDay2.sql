@@ -335,8 +335,6 @@ select * from stars s
 where exists (select * from play p where p.id_actor = s.id)
 	and s.name like 'Steve McQueen';
 
-
-
 -- liste des acteurs-realisateurs
 select * from stars 
 where 
@@ -346,9 +344,54 @@ where
 		select id_actor from play)
 order by name;
 
+-- ensembliste
+-- dans l'1 des 2 : union : UNION
+-- dans les 2 : intersection : INTERSECT
+-- dans l'un mais pas dans l'autre : soustraction : EXCEPT
 
+select * from stars s
+where exists (select * from play p where p.id_actor = s.id)
+UNION
+select * from stars s 
+where exists (
+		select * from movies m where m.id_director = s.id);
 
+select * from stars s
+where exists (select * from play p where p.id_actor = s.id)
+INTERSECT
+select * from stars s 
+where exists (
+		select * from movies m where m.id_director = s.id)
+order by name;
 
+-- acteurs qui ne sont pas réalisateurs
+select * from stars s
+where exists (select * from play p where p.id_actor = s.id)
+EXCEPT
+select * from stars s 
+where exists (
+		select * from movies m where m.id_director = s.id);
+
+-- réalisateurs qui ne sont pas acteurs
+select * from stars s 
+where exists (
+		select * from movies m where m.id_director = s.id)
+EXCEPT
+select * from stars s
+where exists (select * from play p where p.id_actor = s.id);
+
+-- liste des films réalisés par Tarantino
+select id from stars where name like '%Tarantino';
+
+select * from movies where id_director in (
+	select id from stars where name like '%Tarantino')
+order by year;
+
+-- liste des films dans lesquels a joué Leonardo Di Caprio
+select * from movies where id in (
+	select id_movie from play where id_actor in (
+		select id from stars where name like 'Leonardo DiCaprio'))
+order by year desc;
 
 
 
