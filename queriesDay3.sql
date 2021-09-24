@@ -108,6 +108,46 @@ from
 group by s.id, s.name
 order by nb_movies desc;
 
+select 
+	s.name,
+	count(*) as nb_movies,
+	min(m.year) as year_min,
+	max(m.year) as year_max,
+	string_agg(m.title, ', ') as titles
+from 
+	stars s join movies m on s.id = m.id_director
+group by  s.id, s.name
+order by nb_movies desc;
+
+-- et steve mcqueen ?
+
+-- avec la pk dans le group by, les homonymes sont séparés
+select 
+	s.name,
+	count(*) as nb_movies,
+	min(m.year) as year_min,
+	max(m.year) as year_max,
+	string_agg(m.title, ', ') as titles
+from 
+	stars s left join movies m on s.id = m.id_director
+where s.name like '%McQueen'
+group by  s.id, s.name
+order by nb_movies desc;
+
+-- sans la pk dans le group by, les homonymes sont mis
+-- dans le même paquet
+select 
+	s.name,
+	count(*) as nb_movies,
+	min(m.year) as year_min,
+	max(m.year) as year_max,
+	string_agg(m.title, ', ') as titles
+from 
+	stars s left join movies m on s.id = m.id_director
+where s.name like '%McQueen'
+group by  s.name
+order by nb_movies desc;
+
 
 
 
