@@ -199,6 +199,29 @@ group by  s.id, s.name
 having 	count(*) >= 14
 order by nb_movies desc;
 
+-- le ou les réalisateurs ayant réalisé le plus de film
+
+-- pour les personnes : 
+--	- Clint Eastwood, Steve McQueen (les 2), Quentin Tarentino
+--  - Leonardo DiCaprio
+-- compter le nombre de réalisation (y compris 0) 
+-- et la durée totale des films réalisés
+-- (ajouter un cut à 20 films minimuns)
+
+
+-- même requête en ajoutant le nombre de films joués 
+-- et la durée totale des films joués
+
+
+
+
+
+
+
+
+
+
+
 select * from movies where id_director = 33 order by year desc;
 
 
