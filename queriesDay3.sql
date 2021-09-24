@@ -164,6 +164,22 @@ from
 group by m.id, m.title, m.year
 order by nb_actors desc;
 
+-- 2e methode pour join + group by
+-- warning : pour jointure interne
+select 
+	s.id, s.name, s.birthdate, 
+	nb_movies, year_min, year_max, titles
+from 
+	stars s 
+	join (select 
+			id_director, 
+			count(*) as nb_movies,
+			min(year) as year_min,
+			max(year) as year_max,
+			string_agg(title, ', ') as titles
+		from movies
+		group by id_director) stat on s.id = stat.id_director
+order by nb_movies desc;
 
 
 
