@@ -181,6 +181,25 @@ from
 		group by id_director) stat on s.id = stat.id_director
 order by nb_movies desc;
 
+-- sélection/filtrage avec un group by
+
+-- filtre 1 : années 70 et +
+-- filtre 2 : nb de films à 14 et +
+select 
+	s.name,
+	count(*) as nb_movies,
+	min(m.year) as year_min,
+	max(m.year) as year_max,
+	string_agg(m.title, ', ') as titles
+from 
+	stars s join movies m on s.id = m.id_director
+where 
+	m.year >= 1970
+group by  s.id, s.name
+having 	count(*) >= 14
+order by nb_movies desc;
+
+select * from movies where id_director = 33 order by year desc;
 
 
 
