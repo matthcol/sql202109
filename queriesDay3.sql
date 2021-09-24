@@ -200,6 +200,49 @@ having 	count(*) >= 14
 order by nb_movies desc;
 
 -- le ou les réalisateurs ayant réalisé le plus de film
+-- Décomposition
+-- 1+2: table movies
+-- 1. trouver le nombre maximum de films réalisés
+-- 2. garder les réalisateurs avec ce nombre
+-- 3. joindre table stars pour avoir les noms
+select max(nb_movies) from (
+	select 
+		count(*) as nb_movies
+	from 
+		stars s join movies m on s.id = m.id_director
+	group by s.id, s.name) nbs;
+
+-- raccourci chez Oracle :
+select 
+	max(count(*)) as max_nb_movies
+from 
+	stars s join movies m on s.id = m.id_director
+group by s.id, s.name;
+
+-- selection du réalisateur ayant fait 60 films
+select 
+	s.id, s.name, count(*) as nb_movies
+from 
+	stars s join movies m on s.id = m.id_director
+group by s.id, s.name
+having count(*) = 60;
+
+-- réunir les 2 requêtes
+select 
+	s.id, s.name, count(*) as nb_movies
+from 
+	stars s join movies m on s.id = m.id_director
+group by s.id, s.name
+having count(*) = (
+	select max(nb_movies) from (
+		select 
+			count(*) as nb_movies
+		from 
+			stars s join movies m on s.id = m.id_director
+		group by s.id, s.name) nbs
+);
+
+
 
 -- pour les personnes : 
 --	- Clint Eastwood, Steve McQueen (les 2), Quentin Tarentino
